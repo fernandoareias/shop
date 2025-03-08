@@ -7,9 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-
+@Entity
 @Table(name = "users")
-@Entity(name = "User")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -18,17 +17,20 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_user")
     private Long id;
 
-    @Column(unique = true)
+    @Column(name = "des_email", unique = true, nullable = false)
     private String email;
 
+    @Column(name = "des_password", nullable = false)
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinTable(name="users_roles",
+    @ManyToMany(cascade=CascadeType.PERSIST, fetch=FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name="role_id"))
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
     private List<Role> roles;
-
 }

@@ -8,12 +8,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "v1/products")
+@RequestMapping("/products")
 @Tag(name = "Produtos", description = "API para gerenciamento de produtos")
 public class ProductController {
 
@@ -25,7 +26,8 @@ public class ProductController {
     @ApiResponse(responseCode = "200", description = "Lista de produtos retornada com sucesso")
     public ResponseEntity<ProductListView> getByFilter(
             @Parameter(description = "Filtro para listagem de produtos", required = false)
-            @ModelAttribute ProductListFilter filter
+            @Valid
+            ProductListFilter filter
             ){
 
         var response = productService.getByFilters(filter);

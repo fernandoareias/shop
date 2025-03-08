@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
@@ -22,8 +23,17 @@ public class SecurityConfiguration {
     private UserAuthenticationFilter userAuthenticationFilter;
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
-            "/users/login", // Url que usaremos para fazer login
-            "/users" // Url que usaremos para criar um usuário
+            "/users/login",
+            "/users/sign-up",
+            "/swagger.html",
+            "/v3/api-docs/swagger-config",
+            "/v3/api-docs",
+            "/swagger-ui/**", // Permite acesso ao Swagger UI
+            "/v2/api-docs", // Permite acesso à documentação da API
+            "/swagger-resources/**", // Permite acesso aos recursos do Swagger
+            "/webjars/**", // Permite acesso aos recursos do Swagger
+            "/actuator/**", // Permite acesso ao Actuator
+            "/prometheus"
     };
 
     // Endpoints que requerem autenticação para serem acessados
@@ -44,7 +54,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .csrf(csrf -> csrf.disable()) // Desativa a proteção contra CSRF
+                .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Configura a política de criação de sessão como stateless
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
