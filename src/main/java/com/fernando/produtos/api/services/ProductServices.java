@@ -6,6 +6,7 @@ import com.fernando.produtos.api.repositories.ProductsRepository;
 import com.fernando.produtos.api.services.interfaces.ProductService;
 import com.fernando.produtos.api.specifications.ProductSpecifications;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Service
 public class ProductServices implements ProductService {
@@ -24,20 +26,27 @@ public class ProductServices implements ProductService {
 
     @Override
     public Page<Product> getByFilters(ProductListFilter filter) {
-        Pageable pageable = PageRequest.of(filter.getPage(), filter.getSize(), Sort.by("id").ascending());
+        Pageable pageable = PageRequest.of(filter.getPage() - 1, filter.getSize(), Sort.by("id").ascending());
 
         return productsRepository.findAll(
-                Specification.where(filter.getName() != null ? ProductSpecifications.hasName(filter.getName()) : null)
-                        .and(filter.getPriceLessThan() != null ? ProductSpecifications.hasMaxPrice(filter.getPriceLessThan()) : null)
-                        .and(filter.getPriceGreaterThan() != null ? ProductSpecifications.hasMinPrice(filter.getPriceGreaterThan()) : null),
+                Specification
+                        .where(ProductSpecifications.hasName(filter.getName()))
+                        .and(ProductSpecifications.hasMaxPrice(filter.getPriceLessThan()))
+                        .and(ProductSpecifications.hasMinPrice(filter.getPriceGreaterThan())),
                 pageable
         );
     }
 
     @Override
+    @Cacheable(value = "product", key = "#id")
+    public Optional<Product> getById(Long id) {
+        return productsRepository.findById(id);
+    }
+
+    @Override
     @Transactional
-    public Product Create(String name, String description, BigDecimal price) {
-        var product = new Product(name, price, description);
+    public Product create(String name, String description, BigDecimal price) {
+        var product = Product.get(name, price, description);
         productsRepository.save(product);
         return product;
     }

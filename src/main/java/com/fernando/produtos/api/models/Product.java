@@ -27,14 +27,21 @@ public class Product implements Serializable {
     @Column(name = "vlr_price", precision = 15, scale = 2)
     private BigDecimal price;
 
-    public Product(String name, BigDecimal price, String description) {
+    public Product() {
+    }
+
+    private Product(String name, BigDecimal price, String description) {
         this.name = name;
         this.description = description;
         this.price = price;
     }
 
-    public Product(String name, BigDecimal price) {
+    private Product(String name, BigDecimal price) {
         this(name, price, null);
+    }
+
+    public static Product get(String name, BigDecimal price, String description) {
+        return new Product(name, price, description);
     }
 
     public Long getId() {

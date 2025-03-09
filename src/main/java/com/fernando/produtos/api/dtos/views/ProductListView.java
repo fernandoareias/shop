@@ -3,9 +3,10 @@ package com.fernando.produtos.api.dtos.views;
 
 import com.fernando.produtos.api.models.Product;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ProductListView {
+public class ProductListView implements Serializable {
 
     private String name;
 

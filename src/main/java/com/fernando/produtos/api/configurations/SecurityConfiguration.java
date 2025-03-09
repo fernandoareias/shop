@@ -33,7 +33,9 @@ public class SecurityConfiguration {
             "/swagger-resources/**", // Permite acesso aos recursos do Swagger
             "/webjars/**", // Permite acesso aos recursos do Swagger
             "/actuator/**", // Permite acesso ao Actuator
-            "/prometheus"
+            "/prometheus",
+            "/products",
+            "/products/*"
     };
 
     // Endpoints que requerem autenticação para serem acessados

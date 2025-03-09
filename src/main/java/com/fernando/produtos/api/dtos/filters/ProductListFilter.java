@@ -19,8 +19,8 @@ public class ProductListFilter {
     private BigDecimal priceLessThan;
 
     @NotNull(message = "O número da página é obrigatório")
-    @Min(value = 0, message = "O número da página deve ser >= 0")
-    @Schema(description = "Número da página", example = "0", required = true)
+    @Min(value = 1, message = "O número da página deve ser >= 1")
+    @Schema(description = "Número da página", example = "1", required = true)
     private Integer page;
 
     @NotNull(message = "O tamanho da página é obrigatório")

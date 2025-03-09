@@ -3,7 +3,7 @@ version: '3.8'
 services:
   redis:
     image: redis
-    command: redis-server --requirepass Redis2025!
+    command: redis-server
     ports:
       - "6379:6379"
 
